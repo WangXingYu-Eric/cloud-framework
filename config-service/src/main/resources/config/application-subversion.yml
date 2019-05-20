@@ -1,0 +1,40 @@
+#生产环境可以外置application.yml.参数:--spring.config.location=[绝对路径]
+eureka:
+  instance: #在eureka前台页面中,使得status显示的信息为IP地址和加端口.
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    service-url:
+      defaultZone: http://admin:admin@127.0.0.1:5100/eureka
+
+logging:
+  #生产环境可以外置log4j2.yml.[绝对路径]
+  config: D:\\cloud-framework\\config-service\\src\\main\\resources\\log\\log4j2.yml
+
+server:
+  port: 5200
+
+spring:
+  application:
+    name: config-service
+  cloud:
+    config:
+      #/{application}/{profile}[/{label}]
+      #/{application}-{profile}.yml
+      #/{label}/{application}-{profile}.yml
+      #/{application}-{profile}.properties
+      #/{label}/{application}-{profile}.properties
+      label: trunk
+      server:
+        svn: #SVN环境配置.
+          uri: svn://39.105.54.133/fordemo_mysql
+          username: wxy
+          password: newstands20180601
+          search-paths: /core/properties
+
+management:
+  endpoints:
+    web:
+      exposure:
+        #暴漏refresh接口,用于刷新配置.
+        include: refresh

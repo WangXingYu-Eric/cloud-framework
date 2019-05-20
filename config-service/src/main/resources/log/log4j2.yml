@@ -1,0 +1,145 @@
+Configuration:
+  status: WARN #log4j2自身日志输出级别
+  monitorInterval: 86400 #自动刷新该配置文件的时间间隔(秒).
+  Properties: #自定义配置.
+    Property:
+      - name: APPLICATION_NAME
+        value: "config-service"
+      - name: LOG_DIR
+        value: "D:/logs"
+      - name: CONSOLE_LOG_PATTERN
+        value: "%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} - %clr{%p} %clr{[${sys:APPNAME} --- ${sys:IP}:${sys:APPPORT}]}{magenta} %clr{[%t --- ${sys:PID}]}{blue} %clr{%C[%L]}{cyan} : %m%n"
+      - name: FILE_LOG_PATTERN
+        value: "%d{yyyy-MM-dd HH:mm:ss.SSS} - %p [${sys:APPNAME} --- ${sys:IP}:${sys:APPPORT}] [%t --- ${sys:PID}] %C[%L] : %m%n"
+      - name: FILE_PATTERN
+        value: "${LOG_DIR}/${APPLICATION_NAME}/$${date:yyyy-MM}/${APPLICATION_NAME}-%d{yyyy-MM-dd}-%i.log.gz"
+      - name: ERROR_FILE_PATTERN
+        value: "${LOG_DIR}/${APPLICATION_NAME}/$${date:yyyy-MM}/${APPLICATION_NAME}-ERROR-%d{yyyy-MM-dd}-%i.log.gz"
+      - name: FILE_MAX_SIZE
+        value: "128MB"
+      - name: FILE_MAX_HISTORY
+        value: 100
+  Appenders:
+    Console:  #输出到控制台
+      name: CONSOLE
+      target: SYSTEM_OUT
+      ThresholdFilter:
+        level: TRACE
+        onMatch: ACCEPT
+        onMismatch: DENY
+      PatternLayout:
+        pattern: ${CONSOLE_LOG_PATTERN}
+    RollingFile:
+      - name: ROLLING_FILE #输出debug以上日志到文件,超过${FILE_MAX_SIZE}就压缩.
+        fileName: ${LOG_DIR}/${APPLICATION_NAME}.log
+        filePattern: ${FILE_PATTERN}
+        Filters:
+          ThresholdFilter:
+            - level: ERROR
+              onMatch: DENY
+              onMismatch: NEUTRAL
+            - level: DEBUG
+              onMatch: ACCEPT
+              onMismatch: DENY
+        PatternLayout:
+          pattern: ${FILE_LOG_PATTERN}
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: ${FILE_MAX_SIZE}
+        DefaultRolloverStrategy:
+          max: ${FILE_MAX_HISTORY}
+      - name: ROLLING_FILE_ERROR #输出error日志到文件,超过${FILE_MAX_SIZE}就压缩.
+        fileName: ${LOG_DIR}/${APPLICATION_NAME}-ERROR.log
+        filePattern: ${ERROR_FILE_PATTERN}
+        ThresholdFilter:
+          level: ERROR
+          onMatch: ACCEPT
+          onMismatch: DENY
+        PatternLayout:
+          pattern: ${FILE_LOG_PATTERN}
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: ${FILE_MAX_SIZE}
+        DefaultRolloverStrategy:
+          max: ${FILE_MAX_HISTORY}
+#用于ELK,暂时不用.
+#    Socket:
+#      - name: LOGSTASH
+#        host: 192.168.241.128
+#        port: 4000
+#        protocol: TCP
+#        Filters:
+#          ThresholdFilter:
+#            - level: ERROR
+#              onMatch: DENY
+#              onMismatch: NEUTRAL
+#            - level: DEBUG
+#              onMatch: ACCEPT
+#              onMismatch: DENY
+#        PatternLayout:
+#          pattern: ${CONSOLE_LOG_PATTERN}
+#      - name: LOGSTASH_ERROR
+#        host: 192.168.241.128
+#        port: 4001
+#        protocol: TCP
+#        ThresholdFilter:
+#          level: ERROR
+#          onMatch: ACCEPT
+#          onMismatch: DENY
+#        PatternLayout:
+#          pattern: ${CONSOLE_LOG_PATTERN}
+#      - name: LOGSTASH_SQL
+#        host: 192.168.241.128
+#        port: 4002
+#        protocol: TCP
+#        ThresholdFilter:
+#          level: TRACE
+#          onMatch: ACCEPT
+#          onMismatch: DENY
+#        PatternLayout:
+#          pattern: ${CONSOLE_LOG_PATTERN}
+  Loggers:
+    AsyncRoot:
+      level: INFO
+      includeLocation: TRUE
+      AppenderRef:
+        - ref: CONSOLE
+        - ref: ROLLING_FILE
+        - ref: ROLLING_FILE_ERROR
+#        - ref: LOGSTASH_ALL
+#        - ref: LOGSTASH_ERROR
+#    AsyncLogger:
+#      - name:  com.sinosoft.newstandard.xxx #为指定包配置特殊的Log级别,方便调试.
+#        level: INFO
+#        additivity: FALSE #不在父类的输出源中输出
+#        includeLocation: TRUE
+#        AppenderRef:
+#          - ref: CONSOLE
+#          - ref: ROLLING_FILE
+#          - ref: LOGSTASH_SQL
+---
+#==================================pattern 格式配置 ===============================================
+#%d{yyyy-MM-dd HH:mm:ss.SSS} "d", "date" 时间格式
+#%-5level "p", "level" 输出日志级别,-5 表示左对齐并且固定输出 5 个字符,如果不足在右边补 0
+#%class{1.} "C", "class" 类名,包名只有 1 位
+#%C{3} 获取类名前 3 级目录 (包含类名)
+#%L "L", "line" 输出行号
+#%M "M", "method" 输出所在方法名
+#%m "m", "msg", "message" 日志文本
+#%xEx "xEx", "xThrowable", "xException" ExtendedThrowablePatternConverter
+#"ex", "throwable", "exception" ThrowablePatternConverter
+#"rEx", "rThrowable", "rException" RootThrowablePatternConverter
+#%n 换行
+
+#其他占位符有 (部分):
+#%l "l", "location" 输出语句所在的行数, 包括类名、方法名、文件名、行数 例如:hahaha.Log4j2Test.main(Log4j2Test.java:15)
+#%T "T", "tid", "threadId" 输出线程 ID
+#%t "t", "tn", "thread", "threadName" 输出当前线程名称
+#%tp "tp", "threadPriority" 输出线程权级
+#%F "F", "file" 输出所在的类文件名,如 Log4j2Test.java
+#%logger "c", "logger" 输出 logger 名称,LogManager.getLogger(Log4j2Test.class); 中的名称,此处是 hahaha.Log4j2Test
+#%N "N", "nano" 纳秒
+#%sn "sn", "sequenceNumber" 日志计数 (全局)
+#%u "u", "uuid" UUID(全局)
+#%X{ip} "X", "mdc", "MDC" MDC 方式获取 ip(等同于 %MDC{ip} 和 %mdc{ip} )
+#%x "x", "NDC" NDC 方式

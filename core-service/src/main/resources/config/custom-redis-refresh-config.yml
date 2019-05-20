@@ -1,0 +1,6 @@
+refresh:
+  config:
+    list:
+      - cacheName: "test"
+        preloadSecondTime: 60
+        expirationSecondTime: 60

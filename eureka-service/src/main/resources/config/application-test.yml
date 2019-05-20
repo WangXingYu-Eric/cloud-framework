@@ -1,0 +1,23 @@
+eureka:
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 30000
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://admin:admin@127.0.0.1:5100/eureka
+
+logging:
+  config: classpath:log/log4j2.yml
+
+server:
+  port: 5100
+
+spring:
+  application:
+    name: eureka-service
+  security:
+    user:
+      name: admin
+      password: $2a$10$WFVQ665f3SLp0Q89nmS7VuR5MBUsPUXPIbzcgzOPjBvQrnxYqnHue

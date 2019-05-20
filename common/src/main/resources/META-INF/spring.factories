@@ -1,0 +1,8 @@
+#配置自定义Starter的自动化配置
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.sinosoft.newstandard.common.util.snowflake.SnowflakeIdWorkerConfiguration,\
+  com.sinosoft.newstandard.common.web.WebConfiguration,\
+  com.sinosoft.newstandard.common.SpringContextHolder
+org.springframework.context.ApplicationListener=\
+  com.sinosoft.newstandard.common.CustomLoggingApplicationListener,\
+  com.sinosoft.newstandard.common.CustomConfigurationPropertiesApplicationListener

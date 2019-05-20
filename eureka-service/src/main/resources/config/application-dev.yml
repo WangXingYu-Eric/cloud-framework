@@ -1,0 +1,23 @@
+eureka:
+  server:
+    enable-self-preservation: false #Eureka自我保护机制以及心跳周期长会遇到 Eureka不剔除已关停的节点的问题,默认打开状态.建议生产环境打开此配置.
+    eviction-interval-timer-in-ms: 4000 #清理间隔(单位毫秒,默认是60*1000).
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://admin:admin@127.0.0.1:5100/eureka
+
+logging:
+  config: classpath:log/log4j2.yml
+
+server:
+  port: 5100
+
+spring:
+  application:
+    name: eureka-service
+  security:
+    user:
+      name: admin
+      password: $2a$10$WFVQ665f3SLp0Q89nmS7VuR5MBUsPUXPIbzcgzOPjBvQrnxYqnHue

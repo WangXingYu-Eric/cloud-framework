@@ -1,0 +1,27 @@
+logging:
+  config: classpath:log/log4j2.yml
+
+server:
+  port: 5300
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true #对eureka中注册的服务进行动态转发
+          lower-case-service-id: true #serviceId小写
+
+feign:
+  hystrix:
+    enabled: true
+
+ignore:
+  authentication:
+    urls: "/oauth/token,/oauth/check_token,/oauth/token_key"
+
+authentication:
+  ssl:
+    cerFileName: public.cer

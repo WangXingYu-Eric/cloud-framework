@@ -1,0 +1,22 @@
+#生产环境可以外置application.yml.参数:--spring.config.location=[绝对路径]
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://admin:admin@127.0.0.1:5100/eureka
+
+logging:
+  #生产环境可以外置log4j2.yml.[绝对路径]
+  config: D:\\cloud-framework\\eureka-service\\src\\main\\resources\\log\\log4j2.yml
+
+server:
+  port: 5100
+
+spring:
+  application:
+    name: eureka-service
+  security:
+    user:
+      name: admin
+      password: $2a$10$WFVQ665f3SLp0Q89nmS7VuR5MBUsPUXPIbzcgzOPjBvQrnxYqnHue

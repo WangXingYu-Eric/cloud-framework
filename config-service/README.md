@@ -1,0 +1,11 @@
+#公共配置服务
+**刷新配置:http://IP:PORT/actuator/refresh**  
+**http请求地址的规则如下:**
+```
+label:分支;application:配置文件名(除去环境后缀);profile:环境(dev,test,prod等)
+/{application}/{profile}[/{label}]
+/{application}-{profile}.yml
+/{label}/{application}-{profile}.yml
+/{application}-{profile}.properties
+/{label}/{application}-{profile}.properties
+```

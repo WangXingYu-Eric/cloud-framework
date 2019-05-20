@@ -1,0 +1,7 @@
+service:
+  core:
+    timeout: 60000
+  security:
+    timeout: 60000
+custom:
+  name: "prod"

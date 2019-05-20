@@ -1,0 +1,18 @@
+eureka:
+  instance: #在eureka管理页面中,使得status显示的信息为IP地址和加端口.
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    service-url:
+      defaultZone: http://admin:admin@127.0.0.1:5100/eureka
+
+spring:
+  cloud:
+    config:
+      #自动发现[config-service]服务
+      discovery:
+        enabled: true
+        service-id: config-service
+      label: master #与config-service中配置的label对应
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
