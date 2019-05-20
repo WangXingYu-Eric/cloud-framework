@@ -27,7 +27,7 @@ spring:
       label: master
       server:
         git: #GIT环境配置.
-          uri: https://github.com/Wang-Xing-Yu/cloud-framework
+          uri: https://github.com/WangXingYu-Eric/cloud-framework
           #password:
           #username:
           #可以配置多个,用','分割.

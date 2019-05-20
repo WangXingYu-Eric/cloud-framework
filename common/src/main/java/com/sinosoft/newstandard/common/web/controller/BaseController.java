@@ -1,12 +1,13 @@
 package com.sinosoft.newstandard.common.web.controller;
 
 import com.sinosoft.newstandard.common.enumeration.Constant;
-import com.sinosoft.newstandard.common.enumeration.CustomStatus;
 import com.sinosoft.newstandard.common.exception.BaseException;
 import com.sinosoft.newstandard.common.util.JacksonUtils;
 import com.sinosoft.newstandard.common.util.UrlUtils;
 import com.sinosoft.newstandard.common.web.entity.Result;
 import com.sinosoft.newstandard.common.web.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,8 @@ import java.util.Optional;
  * @Date: 2019-04-08
  **/
 public class BaseController {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected HttpServletRequest request;
 
@@ -80,14 +83,14 @@ public class BaseController {
 
     public User getCurrentUser() throws BaseException {
         if (currentUser == null) {
-            throw new BaseException(CustomStatus.AUTH_ERROR);
+            logger.warn("当前登录用户为空");
         }
         return currentUser;
     }
 
     public List<String> getRoleCodes() throws BaseException {
         if (roleCodes == null) {
-            throw new BaseException(CustomStatus.AUTH_ERROR);
+            logger.warn("未匹配任何角色");
         }
         return roleCodes;
     }
